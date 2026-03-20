@@ -1,0 +1,87 @@
+/* CSS Variables */
+
+:root {
+  --header-bg: #ffffff;
+  --text-color: #262a2e;
+  --container-width: 1600px;
+  --content-width: 1240px;
+  --wide-content-width: 1280px;
+  --page-bg: #ffffff;
+  --cta-bg: #2b3990;
+  --border-line: #e7e9ee;
+  --soft-border: rgba(38, 42, 46, 0.12);
+  --muted-text: #5f6775;
+  --heading-color: #101826;
+  --shadow-card: 0 26px 60px rgba(19, 28, 45, 0.08);
+  --display-font: "Urbanist", Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --faq-display-font: "Vert Grotesk Display", "Urbanist", Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Global Styles */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text-color);
+  background: var(--page-bg);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+a:focus-visible {
+  outline: 3px solid rgba(43, 57, 144, 0.22);
+  outline-offset: 3px;
+}
+
+/* Keyframes */
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Motion Preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

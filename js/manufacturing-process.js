@@ -9,11 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const title = process.querySelector("[data-process-title]");
   const description = process.querySelector("[data-process-description]");
   const points = process.querySelector("[data-process-points]");
+  const media = process.querySelector(".process-media");
   const image = process.querySelector("[data-process-image]");
   const prevButton = process.querySelector("[data-process-prev]");
   const nextButton = process.querySelector("[data-process-next]");
 
-  if (!tabs.length || !title || !description || !points || !image || !prevButton || !nextButton) {
+  if (!tabs.length || !title || !description || !points || !media || !image || !prevButton || !nextButton) {
     return;
   }
 
@@ -95,23 +96,46 @@ document.addEventListener("DOMContentLoaded", () => {
   const mediaSlides = [
     {
       src: "assets/boatimg.jpg",
-      alt: "HDPE pipe manufacturing process image one",
-      position: "center center",
+      alt: "HDPE pipe manufacturing process handling stage",
+      position: "center 54%",
     },
     {
-      src: "assets/hero.jpg",
-      alt: "HDPE pipe manufacturing process image two",
-      position: "center 46%",
+      src: "assets/human2.jpg",
+      alt: "HDPE pipe manufacturing quality inspection stage",
+      position: "center 38%",
     },
     {
-      src: "assets/img.png",
-      alt: "HDPE pipe manufacturing process image three",
-      position: "center center",
+      src: "assets/human1.jpg",
+      alt: "HDPE pipe manufacturing operations review stage",
+      position: "center 30%",
     },
   ];
 
   let stageIndex = 0;
   let imageIndex = 0;
+  let isAnimating = false;
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const imageAnimationClasses = [
+    "is-entering-next",
+    "is-entering-prev",
+    "is-exiting-next",
+    "is-exiting-prev",
+  ];
+
+  mediaSlides.forEach(({ src }) => {
+    const preloadImage = new Image();
+    preloadImage.src = src;
+  });
+
+  function clearImageAnimationState(target) {
+    target.classList.remove(...imageAnimationClasses, "process-image-clone");
+  }
+
+  function updateImageContent(target, mediaSlide) {
+    target.src = mediaSlide.src;
+    target.alt = mediaSlide.alt;
+    target.style.objectPosition = mediaSlide.position;
+  }
 
   function renderStage() {
     const stage = stages[stageIndex];
@@ -134,12 +158,56 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function renderImage() {
-    const media = mediaSlides[imageIndex];
+  function renderImage(direction = 0) {
+    const mediaSlide = mediaSlides[imageIndex];
 
-    image.src = media.src;
-    image.alt = media.alt;
-    image.style.objectPosition = media.position;
+    if (direction === 0 || prefersReducedMotion.matches) {
+      clearImageAnimationState(image);
+      updateImageContent(image, mediaSlide);
+      return;
+    }
+
+    isAnimating = true;
+
+    // Clone the current image so we can animate the outgoing and incoming slides separately.
+    const outgoingImage = image.cloneNode(true);
+    clearImageAnimationState(outgoingImage);
+    outgoingImage.setAttribute("aria-hidden", "true");
+    outgoingImage.classList.add(
+      "process-image-clone",
+      direction > 0 ? "is-exiting-next" : "is-exiting-prev"
+    );
+    media.appendChild(outgoingImage);
+
+    clearImageAnimationState(image);
+    updateImageContent(image, mediaSlide);
+    image.classList.add(direction > 0 ? "is-entering-next" : "is-entering-prev");
+
+    image.addEventListener(
+      "animationend",
+      () => {
+        clearImageAnimationState(image);
+        isAnimating = false;
+      },
+      { once: true }
+    );
+
+    outgoingImage.addEventListener(
+      "animationend",
+      () => {
+        outgoingImage.remove();
+      },
+      { once: true }
+    );
+  }
+
+  function stepImage(direction) {
+    if (isAnimating) {
+      return;
+    }
+
+    imageIndex = (imageIndex + direction + mediaSlides.length) % mediaSlides.length;
+    renderImage(direction);
   }
 
   tabs.forEach((tab, tabIndex) => {
@@ -150,13 +218,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   prevButton.addEventListener("click", () => {
-    imageIndex = (imageIndex - 1 + mediaSlides.length) % mediaSlides.length;
-    renderImage();
+    stepImage(-1);
   });
 
   nextButton.addEventListener("click", () => {
-    imageIndex = (imageIndex + 1) % mediaSlides.length;
-    renderImage();
+    stepImage(1);
   });
 
   renderStage();
