@@ -16,8 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let intervalId = null;
   let isEnabled = false;
-  let isResetting = false;
   let offset = 0;
+  let step = 0;
+  let loopWidth = 0;
+  let cropOffset = 0;
 
   function removeClones() {
     track.querySelectorAll("[data-results-clone]").forEach((node) => {
@@ -25,15 +27,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function appendClones() {
+  function createClone(card) {
+    const clone = card.cloneNode(true);
+    clone.setAttribute("data-results-clone", "true");
+    clone.setAttribute("aria-hidden", "true");
+    return clone;
+  }
+
+  function buildLoopTrack() {
     removeClones();
 
+    const prependFragment = document.createDocumentFragment();
+    const appendFragment = document.createDocumentFragment();
+
     originalCards.forEach((card) => {
-      const clone = card.cloneNode(true);
-      clone.setAttribute("data-results-clone", "true");
-      clone.setAttribute("aria-hidden", "true");
-      track.appendChild(clone);
+      prependFragment.appendChild(createClone(card));
+      appendFragment.appendChild(createClone(card));
     });
+
+    track.prepend(prependFragment);
+    track.append(appendFragment);
   }
 
   function getStep() {
@@ -46,11 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getInitialOffset() {
-    return getStep() * 0.5;
-  }
-
-  function getLoopWidth() {
-    return getStep() * originalCards.length;
+    return loopWidth + cropOffset;
   }
 
   function applyPosition(useTransition = true) {
@@ -72,51 +81,41 @@ document.addEventListener("DOMContentLoaded", () => {
     stopAutoSlide();
 
     intervalId = window.setInterval(() => {
-      if (!isEnabled || isResetting) {
+      if (!isEnabled) {
         return;
       }
 
-      offset += getStep();
+      offset += step;
       applyPosition(true);
     }, 2800);
   }
 
-  function enable() {
-    if (isEnabled) {
-      return;
-    }
-
-    appendClones();
+  function configureLoop() {
+    buildLoopTrack();
+    step = getStep();
+    loopWidth = step * originalCards.length;
+    cropOffset = step * 0.5;
     offset = getInitialOffset();
-    isEnabled = true;
     applyPosition(false);
+  }
+
+  function enable() {
+    isEnabled = true;
+    configureLoop();
     startAutoSlide();
   }
 
   function disable() {
     stopAutoSlide();
     isEnabled = false;
-    isResetting = false;
     removeClones();
     offset = 0;
+    step = 0;
+    loopWidth = 0;
+    cropOffset = 0;
     track.style.left = "";
     track.style.transform = "";
     track.style.transition = "";
-  }
-
-  function syncMode() {
-    if (reducedMotion.matches || mobileBreakpoint.matches) {
-      disable();
-      return;
-    }
-
-    if (!isEnabled) {
-      enable();
-      return;
-    }
-
-    offset = getInitialOffset();
-    applyPosition(false);
   }
 
   track.addEventListener("transitionend", () => {
@@ -124,20 +123,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const resetPoint = getInitialOffset() + getLoopWidth();
+    const upperBound = loopWidth * 2 + cropOffset;
+    const lowerBound = cropOffset;
 
-    if (offset < resetPoint) {
-      return;
+    if (offset >= upperBound - 1) {
+      offset -= loopWidth;
+      applyPosition(false);
+    } else if (offset <= lowerBound - 1) {
+      offset += loopWidth;
+      applyPosition(false);
     }
-
-    isResetting = true;
-    offset = getInitialOffset();
-    applyPosition(false);
-
-    window.requestAnimationFrame(() => {
-      isResetting = false;
-      track.style.transition = "transform 560ms cubic-bezier(0.22, 1, 0.36, 1)";
-    });
   });
 
   carousel.addEventListener("mouseenter", stopAutoSlide);
@@ -146,6 +141,15 @@ document.addEventListener("DOMContentLoaded", () => {
       startAutoSlide();
     }
   });
+
+  function syncMode() {
+    if (reducedMotion.matches || mobileBreakpoint.matches) {
+      disable();
+      return;
+    }
+
+    enable();
+  }
 
   window.addEventListener("resize", syncMode);
   reducedMotion.addEventListener("change", syncMode);
