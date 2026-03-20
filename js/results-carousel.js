@@ -1,3 +1,4 @@
+// Results carousel: clone the cards on both sides so the desktop auto-scroll can loop seamlessly.
 document.addEventListener("DOMContentLoaded", () => {
   const carousel = document.querySelector("[data-results-carousel]");
   const track = carousel?.querySelector("[data-results-track]");
@@ -21,12 +22,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let loopWidth = 0;
   let cropOffset = 0;
 
+  // Remove generated duplicates before rebuilding the loop on resize or mode changes.
   function removeClones() {
     track.querySelectorAll("[data-results-clone]").forEach((node) => {
       node.remove();
     });
   }
 
+  // Mark clones so assistive tech ignores them and cleanup stays simple.
   function createClone(card) {
     const clone = card.cloneNode(true);
     clone.setAttribute("data-results-clone", "true");
@@ -40,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const prependFragment = document.createDocumentFragment();
     const appendFragment = document.createDocumentFragment();
 
+    // Place a copy of the full set before and after the originals to hide loop resets.
     originalCards.forEach((card) => {
       prependFragment.appendChild(createClone(card));
       appendFragment.appendChild(createClone(card));
@@ -62,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return loopWidth + cropOffset;
   }
 
+  // Move the track with or without animation depending on whether we are sliding or snapping.
   function applyPosition(useTransition = true) {
     track.style.left = "0";
     track.style.transform = `translateX(-${offset}px)`;
@@ -80,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function startAutoSlide() {
     stopAutoSlide();
 
+    // Advance by one card at a steady interval while the desktop loop is enabled.
     intervalId = window.setInterval(() => {
       if (!isEnabled) {
         return;
@@ -123,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // Snap back into the middle copy once we cross an edge so the loop looks continuous.
     const upperBound = loopWidth * 2 + cropOffset;
     const lowerBound = cropOffset;
 
@@ -142,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Disable the effect on mobile and reduced-motion setups, otherwise keep the loop running.
   function syncMode() {
     if (reducedMotion.matches || mobileBreakpoint.matches) {
       disable();

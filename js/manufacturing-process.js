@@ -1,3 +1,4 @@
+// Manufacturing process module: tabs swap the stage copy while the side controls cycle supporting photos.
 document.addEventListener("DOMContentLoaded", () => {
   const process = document.querySelector("[data-process]");
 
@@ -122,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "is-exiting-prev",
   ];
 
+  // Preload supporting images so next/previous transitions feel immediate.
   mediaSlides.forEach(({ src }) => {
     const preloadImage = new Image();
     preloadImage.src = src;
@@ -137,6 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
     target.style.objectPosition = mediaSlide.position;
   }
 
+  // Render the selected production stage text and keep tab state accessible.
   function renderStage() {
     const stage = stages[stageIndex];
 
@@ -158,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Update the side image and animate directional transitions when motion is allowed.
   function renderImage(direction = 0) {
     const mediaSlide = mediaSlides[imageIndex];
 
@@ -201,6 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+  // Rotate through the image set independently of the selected text tab.
   function stepImage(direction) {
     if (isAnimating) {
       return;

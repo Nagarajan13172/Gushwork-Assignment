@@ -1,3 +1,4 @@
+// Applications carousel: move the track one card at a time and clamp it within the visible viewport.
 document.addEventListener("DOMContentLoaded", () => {
   const section = document.querySelector(".applications-section");
 
@@ -23,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let index = 0;
 
+  // Measure one slide movement using the first card width plus the grid gap.
   function getStep() {
     const firstSlide = slides[0];
     const slideWidth = firstSlide.getBoundingClientRect().width;
@@ -35,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(0, track.scrollWidth - viewport.clientWidth);
   }
 
+  // Keep a small desktop lead-in so the first card aligns with the design framing.
   function getBaseOffset() {
     if (window.innerWidth <= 900) {
       return 0;
@@ -54,11 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.ceil(available / step);
   }
 
+  // Disable navigation at the ends so the track never overshoots.
   function syncButtons(translateX, baseOffset) {
     prevButton.disabled = translateX <= baseOffset + 1;
     nextButton.disabled = translateX >= getMaxTranslate() - 1;
   }
 
+  // Recompute the translate value from the current index whenever the layout changes.
   function render() {
     const step = getStep();
     const maxIndex = getMaxIndex();

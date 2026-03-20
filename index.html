@@ -20,8 +20,10 @@
     />
     <script src="js/accordion.js" defer></script>
     <script src="js/applications-carousel.js" defer></script>
+    <script src="js/hero-carousel.js" defer></script>
     <script src="js/manufacturing-process.js" defer></script>
     <script src="js/results-carousel.js" defer></script>
+    <script src="js/sticky-header.js" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -50,25 +52,38 @@
           </nav>
 
           <div class="hero-grid">
-            <div class="hero-media-column">
+            <div class="hero-media-column" data-hero-carousel>
               <div class="hero-media-card">
                 <img
                   src="assets/hero.jpg"
                   alt="Mangalam HDPE pipe installation in progress"
                   class="hero-image"
+                  data-hero-image
                 />
-                <span class="media-nav media-nav-prev" aria-hidden="true">&larr;</span>
-                <span class="media-nav media-nav-next" aria-hidden="true">&rarr;</span>
+
+                <div class="hero-zoom-preview" aria-hidden="true">
+                  <div class="hero-zoom-surface" data-hero-zoom-surface></div>
+                </div>
+
+                <button
+                  class="media-nav media-nav-prev"
+                  type="button"
+                  data-hero-prev
+                  aria-label="Previous product image"
+                >
+                  <span aria-hidden="true">&larr;</span>
+                </button>
+                <button
+                  class="media-nav media-nav-next"
+                  type="button"
+                  data-hero-next
+                  aria-label="Next product image"
+                >
+                  <span aria-hidden="true">&rarr;</span>
+                </button>
               </div>
 
-              <ul class="hero-thumbnails" aria-hidden="true">
-                <li class="hero-thumbnail is-active"></li>
-                <li class="hero-thumbnail"></li>
-                <li class="hero-thumbnail"></li>
-                <li class="hero-thumbnail"></li>
-                <li class="hero-thumbnail"></li>
-                <li class="hero-thumbnail"></li>
-              </ul>
+              <ul class="hero-thumbnails" data-hero-thumbnails aria-label="Product image thumbnails"></ul>
             </div>
 
             <div class="hero-content">
