@@ -7,15 +7,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const tabs = Array.from(process.querySelectorAll("[data-process-tab]"));
+  const stepLabel = process.querySelector("[data-process-step]");
   const title = process.querySelector("[data-process-title]");
   const description = process.querySelector("[data-process-description]");
   const points = process.querySelector("[data-process-points]");
   const media = process.querySelector(".process-media");
   const image = process.querySelector("[data-process-image]");
-  const prevButton = process.querySelector("[data-process-prev]");
-  const nextButton = process.querySelector("[data-process-next]");
+  const imagePrevButton = process.querySelector("[data-process-prev]");
+  const imageNextButton = process.querySelector("[data-process-next]");
+  const stagePrevButtons = Array.from(process.querySelectorAll("[data-process-stage-prev]"));
+  const stageNextButtons = Array.from(process.querySelectorAll("[data-process-stage-next]"));
 
-  if (!tabs.length || !title || !description || !points || !media || !image || !prevButton || !nextButton) {
+  if (!tabs.length || !title || !description || !points || !media || !image || !imagePrevButton || !imageNextButton) {
     return;
   }
 
@@ -152,6 +155,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     title.textContent = stage.title;
     description.textContent = stage.description;
+
+    if (stepLabel) {
+      const totalSteps = stages.length;
+      const stepNumber = stageIndex + 1;
+      const tabText = tabs[stageIndex]?.textContent?.trim() || "Process";
+      stepLabel.textContent = `Step ${stepNumber}/${totalSteps}: ${tabText}`;
+    }
+
     points.innerHTML = "";
 
     stage.points.forEach((point) => {
@@ -222,12 +233,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  prevButton.addEventListener("click", () => {
+  imagePrevButton.addEventListener("click", () => {
     stepImage(-1);
   });
 
-  nextButton.addEventListener("click", () => {
+  imageNextButton.addEventListener("click", () => {
     stepImage(1);
+  });
+
+  stagePrevButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      stageIndex = (stageIndex - 1 + stages.length) % stages.length;
+      imageIndex = stageIndex % mediaSlides.length;
+      renderStage();
+      renderImage(-1);
+    });
+  });
+
+  stageNextButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      stageIndex = (stageIndex + 1) % stages.length;
+      imageIndex = stageIndex % mediaSlides.length;
+      renderStage();
+      renderImage(1);
+    });
   });
 
   renderStage();

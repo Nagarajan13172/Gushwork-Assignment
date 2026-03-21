@@ -936,6 +936,20 @@
   gap: 20px;
 }
 
+.process-step {
+  margin: 0;
+  display: none;
+  width: fit-content;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #2b3990;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.006em;
+}
+
 .process-copy h3 {
   margin: 0;
   color: #111827;
@@ -1072,6 +1086,41 @@
 
 .process-image-nav-next {
   right: 20px;
+}
+
+.process-mobile-nav {
+  display: none;
+}
+
+.process-mobile-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 8px 16px;
+  border: 1px solid rgba(17, 24, 39, 0.16);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111827;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+}
+
+.process-mobile-button:hover,
+.process-mobile-button:focus-visible {
+  border-color: rgba(43, 57, 144, 0.36);
+  color: #2b3990;
+  background: #ffffff;
+}
+
+.process-mobile-divider {
+  flex: 1 1 auto;
+  height: 1px;
+  background: rgba(17, 24, 39, 0.14);
 }
 
 @keyframes process-slide-in-next {
@@ -1660,6 +1709,68 @@
   }
 }
 
+@media (max-width: 800px) {
+  .process-panel {
+    padding: 24px;
+    gap: 22px;
+  }
+
+  .process-tabs {
+    display: none;
+  }
+
+  .process-content {
+    gap: 18px;
+  }
+
+  .process-copy {
+    gap: 14px;
+  }
+
+  .process-step {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .process-copy h3 {
+    font-size: 30px;
+    line-height: 1.2;
+  }
+
+  .process-copy p {
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  .process-points {
+    gap: 10px;
+  }
+
+  .process-points li {
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .process-media {
+    border-radius: 16px;
+    aspect-ratio: 560 / 340;
+  }
+
+  .process-image-nav {
+    display: none;
+  }
+
+  .process-mobile-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .process-mobile-button-next {
+    margin-left: auto;
+  }
+}
+
 @media (max-width: 640px) {
   .media-nav {
     width: 44px;
@@ -1776,6 +1887,21 @@
 
   .process-copy h3 {
     font-size: 24px;
+  }
+
+  .process-step {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .process-mobile-nav {
+    gap: 10px;
+  }
+
+  .process-mobile-button {
+    min-height: 34px;
+    padding: 8px 14px;
+    font-size: 13px;
   }
 
   .process-image-nav {
