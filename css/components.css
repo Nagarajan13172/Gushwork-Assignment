@@ -1878,3 +1878,192 @@
     transition: none !important;
   }
 }
+
+/* ============================================================
+   Catalogue Email Modal
+   ============================================================ */
+
+.catalogue-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 16px;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.catalogue-overlay.is-visible {
+  opacity: 1;
+}
+
+.catalogue-overlay[hidden] {
+  display: none;
+}
+
+.catalogue-modal {
+  width: 550px;
+  max-width: 100%;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(12px);
+  transition: transform 200ms ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+}
+
+.catalogue-overlay.is-visible .catalogue-modal {
+  transform: translateY(0);
+}
+
+/* Header */
+.catalogue-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 14px 24px;
+  border-bottom: 1px solid #E1E3E8;
+  flex-shrink: 0;
+}
+
+.catalogue-modal-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 140%;
+  letter-spacing: -0.01em;
+  color: #111827;
+}
+
+.catalogue-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #E1E3E8;
+  background: transparent;
+  padding: 6px;
+  cursor: pointer;
+  color: #6B7280;
+  flex-shrink: 0;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.catalogue-modal-close:hover {
+  background: #F3F4F6;
+  color: #111827;
+}
+
+.catalogue-modal-close svg {
+  width: 8px;
+  height: 8px;
+  display: block;
+}
+
+/* Body */
+.catalogue-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #E1E3E8;
+}
+
+.catalogue-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.catalogue-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.006em;
+  color: #111827;
+}
+
+.catalogue-required {
+  color: #EF4444;
+  margin-left: 2px;
+}
+
+.catalogue-optional {
+  color: #6B7280;
+  font-weight: 400;
+}
+
+.catalogue-input {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #E1E3E8;
+  padding: 0 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #111827;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.catalogue-input::placeholder {
+  color: #9CA3AF;
+}
+
+.catalogue-input:focus {
+  border-color: #6366F1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* Footer */
+.catalogue-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 56px;
+  padding: 11px 16px;
+  border-top: 1px solid #E1E3E8;
+  flex-shrink: 0;
+}
+
+.catalogue-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #2B3990;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 160%;
+  letter-spacing: 0px;
+  cursor: pointer;
+  transition: background 150ms ease;
+  white-space: nowrap;
+}
+
+.catalogue-download-btn:hover {
+  background: #24307A;
+}
+
+.catalogue-download-btn:disabled {
+  background: #D1D5DB;
+  cursor: not-allowed;
+}
+}

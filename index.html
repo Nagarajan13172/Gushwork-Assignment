@@ -48,7 +48,7 @@
           <nav class="hero-breadcrumbs" aria-label="Breadcrumb">
             <a href="#" class="breadcrumb-link">Products</a>
             <span class="breadcrumb-divider" aria-hidden="true">&rsaquo;</span>
-            <span class="breadcrumb-current" aria-current="page">HDPE Pipes</span>
+            <span class="breadcrumb-current" aria-current="page">Two For One Twister</span>
           </nav>
 
           <div class="hero-grid">
@@ -262,7 +262,7 @@
           </div>
 
           <div class="technical-actions">
-            <a href="#" class="datasheet-button">
+            <a href="#" class="datasheet-button" id="datasheetBtn">
               <i class="fa-solid fa-download" aria-hidden="true"></i>
               <span>Download Full Technical Datasheet</span>
             </a>
@@ -1112,5 +1112,39 @@
         </div>
       </div>
     </footer>
+
+    <!-- Catalogue Email Modal -->
+    <div class="catalogue-overlay" id="catalogueOverlay" role="dialog" aria-modal="true" aria-labelledby="catalogueModalTitle" hidden>
+      <div class="catalogue-modal">
+        <!-- Header -->
+        <div class="catalogue-modal-header">
+          <span class="catalogue-modal-title" id="catalogueModalTitle">Let us email the entire catalogue to you</span>
+          <button class="catalogue-modal-close" id="catalogueModalClose" aria-label="Close modal" type="button">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M1 1L7 7M7 1L1 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Inputs -->
+        <div class="catalogue-modal-body">
+          <div class="catalogue-field">
+            <label class="catalogue-label" for="catalogueEmail">Your Email <span class="catalogue-required">*</span></label>
+            <input class="catalogue-input" type="email" id="catalogueEmail" name="email" placeholder="example@gmail.com" autocomplete="email" required />
+          </div>
+          <div class="catalogue-field">
+            <label class="catalogue-label" for="catalogueContact">Your Contact <span class="catalogue-optional">(Optional)</span></label>
+            <input class="catalogue-input" type="tel" id="catalogueContact" name="contact" placeholder="+91-0000000000" autocomplete="tel" />
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="catalogue-modal-footer">
+          <button class="catalogue-download-btn" id="catalogueDownloadBtn" type="button">Download Brochure</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/catalogue-modal.js"></script>
   </body>
 </html>
