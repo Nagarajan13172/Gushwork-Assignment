@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const points = process.querySelector("[data-process-points]");
   const media = process.querySelector(".process-media");
   const image = process.querySelector("[data-process-image]");
+  const zoomSurface = process.querySelector("[data-process-zoom-surface]");
   const imagePrevButton = process.querySelector("[data-process-prev]");
   const imageNextButton = process.querySelector("[data-process-next]");
   const stagePrevButtons = Array.from(process.querySelectorAll("[data-process-stage-prev]"));
@@ -125,6 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
     "is-exiting-next",
     "is-exiting-prev",
   ];
+  const zoom =
+    window.createCarouselImageZoom && zoomSurface
+      ? window.createCarouselImageZoom({
+          container: media,
+          previewSurface: zoomSurface,
+        })
+      : null;
 
   // Preload supporting images so next/previous transitions feel immediate.
   mediaSlides.forEach(({ src }) => {
@@ -234,15 +242,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   imagePrevButton.addEventListener("click", () => {
+    zoom?.hide();
     stepImage(-1);
   });
 
   imageNextButton.addEventListener("click", () => {
+    zoom?.hide();
     stepImage(1);
   });
 
   stagePrevButtons.forEach((button) => {
     button.addEventListener("click", () => {
+      zoom?.hide();
       stageIndex = (stageIndex - 1 + stages.length) % stages.length;
       imageIndex = stageIndex % mediaSlides.length;
       renderStage();
@@ -252,11 +263,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   stageNextButtons.forEach((button) => {
     button.addEventListener("click", () => {
+      zoom?.hide();
       stageIndex = (stageIndex + 1) % stages.length;
       imageIndex = stageIndex % mediaSlides.length;
       renderStage();
       renderImage(1);
     });
+  });
+
+  media.addEventListener("mouseenter", (event) => {
+    if (event.pointerType && event.pointerType !== "mouse") {
+      return;
+    }
+
+    zoom?.showFromImage(image);
+  });
+
+  media.addEventListener("mousemove", (event) => {
+    if (event.target instanceof Element && event.target.closest(".process-image-nav")) {
+      return;
+    }
+
+    zoom?.previewFromEvent(event, media, image);
+  });
+
+  media.addEventListener("mouseleave", () => {
+    zoom?.hide();
   });
 
   renderStage();

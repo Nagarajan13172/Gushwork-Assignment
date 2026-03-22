@@ -20,6 +20,7 @@
       referrerpolicy="no-referrer"
     />
     <script src="js/accordion.js" defer></script>
+    <script src="js/carousel-image-zoom.js" defer></script>
     <script src="js/applications-carousel.js" defer></script>
     <script src="js/hero-carousel.js" defer></script>
     <script src="js/manufacturing-process.js" defer></script>
@@ -564,6 +565,9 @@
         </div>
 
         <div class="applications-carousel-shell" data-applications-carousel>
+          <div class="applications-zoom-preview" data-carousel-zoom-preview aria-hidden="true">
+            <div class="carousel-zoom-surface" data-carousel-zoom-surface></div>
+          </div>
           <div class="applications-viewport" data-carousel-viewport>
             <div class="applications-track" data-carousel-track>
               <article class="application-card">
@@ -733,6 +737,10 @@
                   class="process-image"
                   data-process-image
                 />
+
+                <div class="process-zoom-preview" aria-hidden="true">
+                  <div class="carousel-zoom-surface" data-process-zoom-surface></div>
+                </div>
 
                 <button
                   class="process-image-nav process-image-nav-prev"

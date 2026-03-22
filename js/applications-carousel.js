@@ -17,10 +17,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const viewport = carousel.querySelector("[data-carousel-viewport]");
   const track = carousel.querySelector("[data-carousel-track]");
   const slides = Array.from(track.children);
+  const zoomSurface = carousel.querySelector("[data-carousel-zoom-surface]");
 
   if (!viewport || !track || slides.length === 0) {
     return;
   }
+
+  const zoom =
+    window.createCarouselImageZoom && zoomSurface
+      ? window.createCarouselImageZoom({
+          container: carousel,
+          previewSurface: zoomSurface,
+        })
+      : null;
+
+  const slideCards = slides
+    .map((slide) => ({
+      card: slide,
+      image: slide.querySelector(".application-card-image"),
+    }))
+    .filter(({ image }) => Boolean(image));
+
+  slideCards.forEach(({ card, image }) => {
+    card.addEventListener("mouseenter", (event) => {
+      if (event.pointerType && event.pointerType !== "mouse") {
+        return;
+      }
+
+      zoom?.showFromImage(image);
+    });
+
+    card.addEventListener("mousemove", (event) => {
+      zoom?.previewFromEvent(event, card, image);
+    });
+
+    card.addEventListener("mouseleave", () => {
+      zoom?.hide();
+    });
+  });
 
   let index = 0;
 
@@ -77,15 +111,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   prevButton.addEventListener("click", () => {
     index = Math.max(0, index - 1);
+    zoom?.hide();
     render();
   });
 
   nextButton.addEventListener("click", () => {
     index = Math.min(getMaxIndex(), index + 1);
+    zoom?.hide();
     render();
   });
 
   window.addEventListener("resize", () => {
+    zoom?.hide();
     index = Math.min(index, getMaxIndex());
     render();
   });
