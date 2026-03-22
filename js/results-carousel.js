@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let offset = 0;
   let step = 0;
   let loopWidth = 0;
-  let cropOffset = 0;
 
   // Remove generated duplicates before rebuilding the loop on resize or mode changes.
   function removeClones() {
@@ -62,17 +61,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return cardWidth + gap;
   }
 
-  function getInitialOffset() {
-    return loopWidth + cropOffset;
-  }
-
   function normalizeOffset() {
     if (!loopWidth) {
       return;
     }
 
-    const upperBound = loopWidth * 2 + cropOffset;
-    const lowerBound = cropOffset;
+    const upperBound = loopWidth * 2;
+    const lowerBound = loopWidth;
 
     while (offset >= upperBound) {
       offset -= loopWidth;
@@ -109,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       offset += step;
-      normalizeOffset();
       applyPosition(true);
     }, 2800);
   }
@@ -118,15 +112,24 @@ document.addEventListener("DOMContentLoaded", () => {
     buildLoopTrack();
     step = getStep();
     loopWidth = step * originalCards.length;
-    cropOffset = step * 0.5;
-    offset = getInitialOffset();
-    normalizeOffset();
+
+    if (step <= 0 || loopWidth <= 0) {
+      return false;
+    }
+
+    offset = loopWidth;
     applyPosition(false);
+
+    return true;
   }
 
   function enable() {
-    isEnabled = true;
-    configureLoop();
+    isEnabled = configureLoop();
+
+    if (!isEnabled) {
+      return;
+    }
+
     startAutoSlide();
   }
 
@@ -137,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
     offset = 0;
     step = 0;
     loopWidth = 0;
-    cropOffset = 0;
     track.style.left = "";
     track.style.transform = "";
     track.style.transition = "";
@@ -149,13 +151,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Snap back into the middle copy once we cross an edge so the loop looks continuous.
-    const upperBound = loopWidth * 2 + cropOffset;
-    const lowerBound = cropOffset;
+    const upperBound = loopWidth * 2;
+    const lowerBound = loopWidth;
 
-    if (offset >= upperBound - 1) {
+    if (offset >= upperBound) {
       offset -= loopWidth;
       applyPosition(false);
-    } else if (offset <= lowerBound - 1) {
+    } else if (offset < lowerBound) {
       offset += loopWidth;
       applyPosition(false);
     }
@@ -171,6 +173,11 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    if (loopWidth <= 0) {
+      return;
+    }
+
+    offset = Math.max(loopWidth, Math.min(offset, loopWidth * 2));
     normalizeOffset();
     applyPosition(false);
     startAutoSlide();
