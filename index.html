@@ -25,6 +25,7 @@
     <script src="js/results-carousel.js" defer></script>
     <script src="js/sticky-header.js" defer></script>
     <script src="js/mobile-menu.js" defer></script>
+    <script src="js/request-demo-modal.js" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -43,7 +44,7 @@
           <ul class="nav-list">
             <li><a class="nav-link nav-link-about" href="#">About Us</a></li>
             <li><a class="nav-link nav-link-products" href="#"><span class="products-text">Products</span><i class="fa-solid fa-chevron-down chevron" aria-hidden="true"></i></a></li>
-            <li><a class="nav-cta" href="#">Contact Us</a></li>
+            <li><a class="nav-cta" href="#" data-request-demo-trigger>Contact Us</a></li>
           </ul>
         </nav>
       </div>
@@ -181,7 +182,7 @@
               </div>
 
               <div class="hero-actions">
-                <a href="#" class="hero-action hero-action-primary">Get Custom Quote</a>
+                <a href="#" class="hero-action hero-action-primary" data-request-demo-trigger>Get Custom Quote</a>
                 <a href="#technical-specs" class="hero-action hero-action-secondary">
                   <span>View Technical Specs</span>
                   <span class="hero-action-arrow" aria-hidden="true">&rsaquo;</span>
@@ -357,7 +358,7 @@
           </div>
 
           <div class="benefits-actions">
-            <a href="#" class="benefits-cta">Request a Quote</a>
+            <a href="#" class="benefits-cta" data-request-demo-trigger>Request a Quote</a>
           </div>
         </div>
       </section>
@@ -933,7 +934,7 @@
               <p>Talk to our experts for custom solutions and tailored guidance.</p>
             </div>
 
-            <a href="#" class="portfolio-cta-button">
+            <a href="#" class="portfolio-cta-button" data-request-demo-trigger>
               <i class="fa-solid fa-phone-volume" aria-hidden="true"></i>
               <span>Talk to an Expert</span>
             </a>
@@ -1134,6 +1135,94 @@
         </div>
       </div>
     </footer>
+
+    <!-- Request Demo Modal -->
+    <div
+      class="request-demo-overlay"
+      id="requestDemoOverlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="requestDemoModalTitle"
+      hidden
+    >
+      <div class="request-demo-modal">
+        <div class="request-demo-modal-header">
+          <span class="request-demo-modal-title" id="requestDemoModalTitle">Request a call back</span>
+          <button class="request-demo-modal-close" id="requestDemoModalClose" aria-label="Close modal" type="button">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M1 1L7 7M7 1L1 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        <form class="request-demo-form" id="requestDemoForm" novalidate>
+          <div class="request-demo-modal-body">
+            <label class="request-demo-visually-hidden" for="requestDemoName">Full Name</label>
+            <input
+              class="request-demo-input"
+              type="text"
+              id="requestDemoName"
+              name="full_name"
+              placeholder="Full Name"
+              autocomplete="name"
+              required
+            />
+
+            <label class="request-demo-visually-hidden" for="requestDemoCompany">Company Name</label>
+            <input
+              class="request-demo-input"
+              type="text"
+              id="requestDemoCompany"
+              name="company_name"
+              placeholder="Company Name"
+              autocomplete="organization"
+              required
+            />
+
+            <label class="request-demo-visually-hidden" for="requestDemoEmail">Email Address</label>
+            <input
+              class="request-demo-input"
+              type="email"
+              id="requestDemoEmail"
+              name="email"
+              placeholder="Email Address"
+              autocomplete="email"
+              required
+            />
+
+            <div class="request-demo-phone-row">
+              <label class="request-demo-visually-hidden" for="requestDemoCountryCode">Country Code</label>
+              <select
+                class="request-demo-country-code"
+                id="requestDemoCountryCode"
+                name="country_code"
+                aria-label="Country Code"
+              >
+                <option value="+91">+91</option>
+                <option value="+1">+1</option>
+                <option value="+44">+44</option>
+              </select>
+
+              <label class="request-demo-visually-hidden" for="requestDemoMobile">Mobile Number</label>
+              <input
+                class="request-demo-mobile-input"
+                type="tel"
+                id="requestDemoMobile"
+                name="mobile"
+                placeholder="7003026616"
+                autocomplete="tel"
+                inputmode="tel"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="request-demo-modal-footer">
+            <button class="request-demo-submit-button" type="submit">Submit Form</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <!-- Catalogue Email Modal -->
     <div class="catalogue-overlay" id="catalogueOverlay" role="dialog" aria-modal="true" aria-labelledby="catalogueModalTitle" hidden>
