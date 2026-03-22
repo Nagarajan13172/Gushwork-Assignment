@@ -66,6 +66,23 @@ document.addEventListener("DOMContentLoaded", () => {
     return loopWidth + cropOffset;
   }
 
+  function normalizeOffset() {
+    if (!loopWidth) {
+      return;
+    }
+
+    const upperBound = loopWidth * 2 + cropOffset;
+    const lowerBound = cropOffset;
+
+    while (offset >= upperBound) {
+      offset -= loopWidth;
+    }
+
+    while (offset < lowerBound) {
+      offset += loopWidth;
+    }
+  }
+
   // Move the track with or without animation depending on whether we are sliding or snapping.
   function applyPosition(useTransition = true) {
     track.style.left = "0";
@@ -92,6 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       offset += step;
+      normalizeOffset();
       applyPosition(true);
     }, 2800);
   }
@@ -102,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loopWidth = step * originalCards.length;
     cropOffset = step * 0.5;
     offset = getInitialOffset();
+    normalizeOffset();
     applyPosition(false);
   }
 
@@ -140,6 +159,21 @@ document.addEventListener("DOMContentLoaded", () => {
       offset += loopWidth;
       applyPosition(false);
     }
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (!isEnabled) {
+      return;
+    }
+
+    if (document.hidden) {
+      stopAutoSlide();
+      return;
+    }
+
+    normalizeOffset();
+    applyPosition(false);
+    startAutoSlide();
   });
 
   carousel.addEventListener("mouseenter", stopAutoSlide);
